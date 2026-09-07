@@ -20,19 +20,21 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<BookResponse> findAll() {
         return bookRepository.findAll().stream()
                 .map(BookResponse::fromEntity)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public BookResponse findById(Long id) {
         return BookResponse.fromEntity(getBookOrThrow(id));
     }
 
     @Transactional
     public BookResponse create(BookRequest request) {
-        // availableCopies initialisé à totalCopies à la création
+        // availableCopies initialise a totalCopies a la creation
         Book book = new Book(
                 request.getTitle(),
                 request.getAuthor(),
@@ -51,11 +53,12 @@ public class BookService {
         book.setAuthor(request.getAuthor());
         book.setIsbn(request.getIsbn());
         book.setTotalCopies(request.getTotalCopies());
-        // On ne dépasse jamais totalCopies après une mise à jour
+        // On ne depasse jamais totalCopies apres une mise a jour
         if (book.getAvailableCopies() > book.getTotalCopies()) {
             book.setAvailableCopies(book.getTotalCopies());
         }
-        return BookResponse.fromEntity(book);
+        Book saved = bookRepository.save(book);
+        return BookResponse.fromEntity(saved);
     }
 
     @Transactional
@@ -65,28 +68,35 @@ public class BookService {
     }
 
     /**
-     * Décrémente le stock disponible d'un livre.
-     * Revérifie côté serveur que availableCopies > 0 avant de décrémenter,
-     * même si loan-service a déjà vérifié en amont (défense en profondeur / TOCTOU).
+     * Decremente le stock disponible d'un livre.
+     * La regle "jamais en dessous de 0" est portee par l'entite elle-meme
+     * (Book.decrementAvailableCopies()). Le service se contente de traduire
+     * l'exception technique en exception metier HTTP.
+     * Revérifiee cote serveur meme si loan-service a deja verifie en amont
+     * (defense en profondeur / TOCTOU).
      */
     @Transactional
     public BookResponse decrementStock(Long id) {
         Book book = getBookOrThrow(id);
-        if (book.getAvailableCopies() <= 0) {
+        try {
+            book.decrementAvailableCopies();
+        } catch (IllegalStateException ex) {
             throw new StockUnavailableException(id);
         }
-        book.decrementAvailableCopies();
-        return BookResponse.fromEntity(book);
+        Book saved = bookRepository.save(book);
+        return BookResponse.fromEntity(saved);
     }
 
     /**
-     * Réincrémente le stock disponible d'un livre, sans jamais dépasser totalCopies.
+     * Reincremente le stock disponible d'un livre, sans jamais depasser totalCopies
+     * (regle portee par l'entite : Book.incrementAvailableCopies()).
      */
     @Transactional
     public BookResponse incrementStock(Long id) {
         Book book = getBookOrThrow(id);
         book.incrementAvailableCopies();
-        return BookResponse.fromEntity(book);
+        Book saved = bookRepository.save(book);
+        return BookResponse.fromEntity(saved);
     }
 
     private Book getBookOrThrow(Long id) {
