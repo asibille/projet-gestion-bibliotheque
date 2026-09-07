@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.gestionbibliotheque</groupId>
+    <artifactId>gestion-bibliotheque</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>gestion-bibliotheque</name>
+    <description>Systeme de gestion de bibliotheque - architecture microservices Spring Boot</description>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <!-- Infrastructure : decommentez au fur et a mesure que ces modules existent dans le repo -->
+        <!-- <module>eureka-server</module> -->
+        <!-- <module>config-server</module> -->
+        <!-- <module>api-gateway</module> -->
+        <!-- <module>product-service</module> -->
+        <!-- <module>order-service</module> -->
+
+        <!-- Exercice final -->
+        <module>book-service</module>
+        <module>loan-service</module>
+    </modules>
+
+</project>
