@@ -116,16 +116,16 @@ Les tests couvrent en particulier :
 
 ```
 gestion-bibliotheque/
-├── pom.xml                    # POM racine multi-module
+├── pom.xml                    
 ├── docker-compose.yml
-├── config-repo/                # Fichiers de config servis par config-server
+├── config-repo/               
 │   ├── book-service.yml
 │   └── loan-service.yml
 ├── config-server/
 ├── book-service/
 ├── loan-service/
-├── eureka-server/              # à ajouter
-├── api-gateway/                # à ajouter
-├── product-service/            # à ajouter
-└── order-service/              # à ajouter
+├── eureka-server/             
+├── api-gateway/                
+├── product-service/           
+└── order-service/             
 ```
