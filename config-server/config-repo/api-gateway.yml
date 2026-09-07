@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: book-service
+          uri: lb://book-service
+          predicates:
+            - Path=/api/books/**
+        - id: loan-service
+          uri: lb://loan-service
+          predicates:
+            - Path=/api/loans/**
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true

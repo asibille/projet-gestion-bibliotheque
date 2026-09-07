@@ -19,14 +19,9 @@
     </properties>
 
     <modules>
-        <!-- Infrastructure : decommentez au fur et a mesure que ces modules existent dans le repo -->
-        <!-- <module>eureka-server</module> -->
-        <!-- <module>config-server</module> -->
-        <!-- <module>api-gateway</module> -->
-        <!-- <module>product-service</module> -->
-        <!-- <module>order-service</module> -->
-
-        <!-- Exercice final -->
+        <module>eureka-server</module>
+        <module>config-server</module>
+        <module>api-gateway</module>
         <module>book-service</module>
         <module>loan-service</module>
     </modules>
